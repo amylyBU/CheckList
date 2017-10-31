@@ -1,0 +1,11 @@
+<%= form_with(url: list_tasks_path, model: @task, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :description %>
+    <br>
+    <%= form.text_field :description, id: :task_description %>
+  </div>
+  <br>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

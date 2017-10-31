@@ -1,0 +1,11 @@
+<%= form_with(model: @list, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :title %>
+    <br>
+    <%= form.text_field :title, id: :list_title, required: true %>
+  </div>
+  <br>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
