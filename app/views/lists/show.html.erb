@@ -1,0 +1,25 @@
+<h2><%= @list.title %></h2>
+
+<p>
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Complete</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @list.tasks.each do |task| %>
+        <tr>
+          <td><%= task.description %></td>
+          <td><%= check_box_tag "complete", task.id %></td>
+          <td><%= link_to "Delete", task, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
+
+<p><%= link_to 'Add Task', new_list_task_path(@list) %></p>
+<p><%= link_to 'Back', root_path %></p>
