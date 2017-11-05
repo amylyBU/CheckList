@@ -3,34 +3,66 @@ class TasksController < ApplicationController
   end
 
   def create
-    @list = List.find(params[:list_id])
+    @list = current_list
     @task = Task.new(task_params)
     @task.list_id = @list.id
-    @task.save
-    redirect_to list_path(@list)
+    if @task.save
+      redirect_to list_path(@list)
+    else
+      flash[:error] = 'Failed to create'
+      redirect_to new_list_task_path(@list)
+    end
+  end
+
+  def show
+    @task = current_task
+    @list = @task.list
   end
 
   def new
-    @list = List.find(params[:list_id])
+    @list = current_list
     @task = Task.new
   end
 
   def update
-    @task = find_current_task
-    @task.save
+    @task = current_task
+    @list = @task.list
+    if @task.update(task_params)
+      redirect_to list_path(@list)
+    else
+      flash[:error] = 'Failed to update'
+      redirect_to edit_list_task_path(@list, @task)
+    end
+  end
+
+  def edit
+    @task = current_task
+    @list = @task.list
   end
 
   def destroy
-    @task = find_current_task
-    @list = List.find(@task.list_id)
+    @task = current_task
+    @list = @task.list
     @task.destroy
+    redirect_to list_path(@list)
+  end
+
+  def update_completion
+    @task_ids = params[:task_ids]
+    Task.where(id: @task_ids).update_all(complete: true)
+
+    @list = current_list
     redirect_to list_path(@list)
   end
 
   private
 
-  def find_current_task
+  def current_task
     Task.find(params[:id])
+  end
+
+  def current_list
+    List.find(params[:list_id])
   end
 
   def task_params

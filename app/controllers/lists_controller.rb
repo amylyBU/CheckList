@@ -27,7 +27,7 @@ class ListsController < ApplicationController
   def update
     @list = find_current_list
     if @list.update(list_params)
-      redirect_to root_path
+      redirect_to list_path(find_current_list)
     else
       render :update
     end

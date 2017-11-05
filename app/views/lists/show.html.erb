@@ -1,4 +1,5 @@
 <h2><%= @list.title %></h2>
+<%= link_to "Edit", edit_list_path(@list) %>
 
 <p>
   <table>
@@ -14,7 +15,8 @@
         <tr>
           <td><%= task.description %></td>
           <td><%= check_box_tag "complete", task.id %></td>
-          <td><%= link_to "Delete", task, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <td><%= link_to "Edit", edit_list_task_path(@list, task) %> </td>
+          <td><%= link_to "Delete", task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>
     </tbody>
