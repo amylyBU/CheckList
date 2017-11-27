@@ -48,11 +48,19 @@ class TasksController < ApplicationController
   end
 
   def update_completion
-    @task_ids = params[:task_ids]
-    Task.where(id: @task_ids).update_all(complete: true)
+    @complete_task_ids = params[:task_ids]
+    @all_task_ids = current_list.task_ids
 
-    @list = current_list
-    redirect_to list_path(@list)
+    if @complete_task_ids != nil
+      @complete_task_ids = @complete_task_ids.map(&:to_i)
+      Task.where(id: @complete_task_ids).update_all(complete: true)
+      @incomplete_task_ids = @all_task_ids - @complete_task_ids
+      Task.where(id: @incomplete_task_ids).update_all(complete: false)
+    else
+      Task.where(id: @all_task_ids).update_all(complete: false)
+    end
+
+    redirect_to list_path(current_list)
   end
 
   private
