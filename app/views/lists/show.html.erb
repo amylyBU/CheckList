@@ -2,25 +2,32 @@
 <%= link_to "Edit", edit_list_path(@list) %>
 
 <p>
-  <table>
-    <thead>
-      <tr>
-        <th>Description</th>
-        <th>Complete</th>
-      </tr>
-    </thead>
+  <% if @list.tasks.any? %>
+    <%= form_with method: :put, url: update_completion_list_tasks_path(@list) do |form| %>
+      <table>
+        <thead>
+          <tr>
+            <th>Complete</th>
+            <th>Description</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
 
-    <tbody>
-      <% @list.tasks.each do |task| %>
-        <tr>
-          <td><%= task.description %></td>
-          <td><%= check_box_tag "complete", task.id %></td>
-          <td><%= link_to "Edit", edit_list_task_path(@list, task) %> </td>
-          <td><%= link_to "Delete", task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+        <tbody>
+          <% @list.tasks.each do |task| %>
+              <tr>
+                <td><%= check_box_tag('task_ids[]', task.id, task.complete) %></td>
+                <td><%= task.description %></td>
+                <td><%= link_to "Edit", edit_list_task_path(@list, task) %></td>
+                <td><%= link_to "Delete", task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= form.submit "Update Task Completion" %>
+    <% end %>
+  <% end %>
 </p>
 
 <p><%= link_to 'Add Task', new_list_task_path(@list) %></p>
